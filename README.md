@@ -32,28 +32,21 @@ Make sure you have Poetry installed.
 pip install poetry
 ```
 
+```bash
+poetry install
+```
+
 ### 3. Activate the virtual environment
 ```bash
-poetry shell
+poetry env use 3.10.8
 ```
-Or run commands without shell:
-```bash
-poetry run python main.py
-```
+
 ---
 ## Usage
 ### Run Flask API
 ```bash
-poetry run flask run
-```
-### Run Daily Scheduler
-
-The script will automatically run daily at the same time and fetch the latest exchange rates:
-```bash
 poetry run python main.py
 ```
-The scheduler uses the schedule Python package to run background tasks.
-
 ---
 
 ## API Endpoints
@@ -90,7 +83,18 @@ The project uses SQLite as the local database (by default).
 It contains two main tables:
 
 - series → Stores metadata about each currency series.
+  - id INTEGER PRIMARY KEY AUTOINCREMENT
+  - seriesId TEXT NOT NULL UNIQUE
+  - date TEXT (latest observation date)
+  - latest_value FLOAT (latest observation value)
 - series_history → Stores historical exchange rate observations.
+  - id INTEGER PRIMARY KEY AUTOINCREMENT
+  - seriesId TEXT NOT NULL
+  - date TEXT (observation date)
+  - value FLOAT (observation value)
+  - recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+manage_db.py keeps only the latest HISTORY_LIMIT records per seriesId (default: 3).
 
 --- 
 
