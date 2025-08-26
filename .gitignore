@@ -1,0 +1,8 @@
+# Ignore SQLite database
+series.db
+
+# Ignore Python virtual environments
+__pycache__/
+
+# Environment variables
+.env
